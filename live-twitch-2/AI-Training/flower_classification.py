@@ -2,6 +2,7 @@
 import numpy as np
 import cv2 as cv
 import os
+import datetime
 import tensorflow.keras as keras
 import tensorflow as tf
 from tensorflow.keras.preprocessing import image
@@ -44,7 +45,11 @@ def trainModel(model, epochs, optimizer):
     batch_size = 32
     model.compile(optimizer=optimizer, loss="sparse_categorical_crossentropy", metrics=["accuracy"])
     
-    return model.fit(train_generator, validation_data=valid_generator, epochs=epochs, batch_size=batch_size)
+    # add the TensorBoard callback
+    log_dir = "runs/" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+    tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=log_dir, histogram_freq=1)
+
+    return model.fit(train_generator, validation_data=valid_generator, epochs=epochs, batch_size=batch_size, callbacks = [tensorboard_callback])
 
 
 # DEFINE EVALUATION FUNCTION
