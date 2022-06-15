@@ -1,4 +1,4 @@
-FROM ovhcom/ai-training-tensorflow
+FROM ovhcom/ai-training-tensorflow:2.4.1
 
 WORKDIR /workspace
 ADD . /workspace
