@@ -84,7 +84,7 @@ if __name__ == '__main__':
         classes = class_names,
         target_size=(224, 224),  
         batch_size=32, 
-        class_mode="binary", 
+        class_mode="sparse", 
     )
     
     # validation data
@@ -93,7 +93,7 @@ if __name__ == '__main__':
         classes = class_names,
         target_size=(224, 224), 
         batch_size=32, 
-        class_mode="binary", 
+        class_mode="sparse", 
     )
     
     # test data
@@ -102,7 +102,7 @@ if __name__ == '__main__':
         classes = class_names,
         target_size=(224, 224), 
         batch_size=32, 
-        class_mode="binary", 
+        class_mode="sparse", 
     )
     
     # build the model
