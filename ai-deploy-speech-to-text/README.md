@@ -1,6 +1,17 @@
-## Speech to text Application using *Python* & *Streamlit* and pre-trained models
+# OVHcloud - Live Twitch 05/01 - AI Deploy Beta
+
+## Speech to text Application using *Python*, *Streamlit* and pre-trained models
 
 This speech to text application is based on 2 [notebook tutorials](https://github.com/ovh/ai-training-examples/tree/main/notebooks/natural-language-processing/speech-to-text/conda) *(Basics and advanced parts)*. To better understand the code, we recommend that you read these notebooks.
+
+### Launch the app with AI Deploy:
+<code>
+ovhai app run \
+--default-http-port 8501 \
+--gpu 1 \
+--registry/streamlit_app:version
+</code>
+
 
 ### Files description
 - `requirements.txt` and `packages.txt` files contain the librairies used by our speech to text app
