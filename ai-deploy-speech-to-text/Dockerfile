@@ -8,7 +8,6 @@ RUN pip install -r requirements.txt
 
 CMD [ "streamlit" , "run" , "/workspace/main.py", "--server.address=0.0.0.0" ]
 
-RUN chown -R 42420:42420 /workspace
-#RUN chmod 755 /workspace
+RUN mkdir /data ; chown -R 42420:42420 /workspace /data
 
 ENV HOME=/workspace
