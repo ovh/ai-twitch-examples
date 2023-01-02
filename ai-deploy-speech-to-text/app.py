@@ -322,14 +322,14 @@ def transcription(stt_tokenizer, stt_model, t5_tokenizer, t5_model, summarizer, 
 
                     # Convert mp3/mp4 to wav (Differentiate speakers mode only accepts wav files)
                     if filename.endswith((".mp3", ".mp4")):
-                        new_audio, filename = convert_file_to_wav(myaudio, filename)
+                        myaudio, filename = convert_file_to_wav(myaudio, filename)
                     else:
                         filename = "../data/" + filename
                         myaudio.export(filename, format="wav")
 
                     # Differentiate speakers process
-                    diarization_timestamps, number_of_speakers = diarization_treatment(filename, dia_pipeline,
-                                                                                       max_space, srt_token, start)
+                    diarization_timestamps, number_of_speakers = diarization_treatment(filename, dia_pipeline, max_space, srt_token)
+                    
                     # Saving the number of detected speakers
                     update_session_state("number_of_speakers", number_of_speakers)
 
@@ -578,7 +578,7 @@ def rename_speakers_window():
 
     # Don't have anyone to rename
     else:
-        st.error("0 speakers have been detected. Seem there is an issue with diarization")
+        st.error("0 speakers have been detected. Seems there is an issue with diarization")
         with st.spinner("Redirecting to transcription page"):
             time.sleep(4)
             # return to the results page
@@ -1086,11 +1086,10 @@ def get_diarization(dia_pipeline, filename):
     return diarization, number_of_speakers
 
 
-def convert_str_diarlist_to_timedelta(diarization_result, start):
+def convert_str_diarlist_to_timedelta(diarization_result):
     """
     Extract from Diarization result the given speakers with their respective speaking times and transform them in pandas timedelta objects
     :param diarization_result: result of diarization
-    :param start: start value (s) of the considered audio part to transcribe
     :return: list with timedelta intervals and their respective speaker
     """
 
@@ -1099,8 +1098,8 @@ def convert_str_diarlist_to_timedelta(diarization_result, start):
     diarization_timestamps = []
     for sample in segments:
         # Convert segment in a pd.Timedelta object
-        new_seg = [pd.Timedelta(seconds=round(sample["segment"]["start"] + start, 2)),
-                   pd.Timedelta(seconds=round(sample["segment"]["end"] + start, 2)), sample["label"]]
+        new_seg = [pd.Timedelta(seconds=round(sample["segment"]["start"], 2)),
+                   pd.Timedelta(seconds=round(sample["segment"]["end"], 2)), sample["label"]]
         # Start and end = speaking duration
         # label = who is speaking
         diarization_timestamps.append(new_seg)
@@ -1332,14 +1331,13 @@ def click_timestamp_btn(sub_start):
     update_session_state("start_time", int(sub_start / 1000))  # division to convert ms to s
 
 
-def diarization_treatment(filename, dia_pipeline, max_space, srt_token, start):
+def diarization_treatment(filename, dia_pipeline, max_space, srt_token):
     """
     Launch the whole diarization process to get speakers time intervals as pandas timedelta objects
     :param filename: name of the audio file
     :param dia_pipeline: Diarization Model (Differentiate speakers)
     :param max_space: Maximum temporal distance between two silences
     :param srt_token: Enable/Disable generate srt file (choice fixed by user)
-    :param start: start value (s) of the considered audio part to transcribe
     :return: speakers time intervals list and number of different detected speakers
     """
     # initialization
@@ -1349,7 +1347,7 @@ def diarization_treatment(filename, dia_pipeline, max_space, srt_token, start):
     diarization, number_of_speakers = get_diarization(dia_pipeline, filename)
 
     if len(diarization) > 0:
-        diarization_timestamps = convert_str_diarlist_to_timedelta(diarization, start)
+        diarization_timestamps = convert_str_diarlist_to_timedelta(diarization)
         diarization_timestamps = merge_speaker_times(diarization_timestamps, max_space, srt_token)
         diarization_timestamps = extending_timestamps(diarization_timestamps)
 
