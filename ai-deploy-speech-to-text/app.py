@@ -40,7 +40,7 @@ def config():
 
     # Initialize session state variables
     if 'page_index' not in st.session_state:
-        st.session_state['page_index'] = 0 # Handle which page should be displayed (home page, results page, rename page)
+        st.session_state['page_index'] = -1 # Handle which page should be displayed (token page, home page, results page, rename page)
         st.session_state['txt_transcript'] = "" # Save the transcript as .txt so we can display it again on the results page
         st.session_state["process"] = []  # Save the results obtained so we can display them again on the results page
         st.session_state['srt_txt'] = ""  #  Save the transcript in a subtitles case to display it on the results page
@@ -51,7 +51,9 @@ def config():
         st.session_state["number_of_speakers"] = 0  # Save the number of speakers detected in the conversation (diarization)
         st.session_state["chosen_mode"] = 0  # Save the mode chosen by the user (Diarization or not, timestamps or not)
         st.session_state["btn_token_list"] = []  # List of tokens that indicates what options are activated to adapt the display on results page
-
+        st.session_state["my_HF_token"] = "ACCESS_TOKEN_GOES_HERE" # User's Token that allows the use of the diarization model
+        st.session_state["disable"] = True  # Default appearance of the button to change your token
+        
     # Display Text and CSS
     st.title("Speech to Text App 📝")
 
@@ -1245,8 +1247,19 @@ def update_session_state(var, data, concatenate_token=False):
         st.session_state[var] += data
     else:
         st.session_state[var] = data
+        
+   
+def confirm_token_change(hf_token, page_index):
+    """
+    A function that saves the hugging face token entered by the user. 
+    It also updates the page index variable so we can indicate we now want to display the home page instead of the token page
+    :param hf_token: user's token
+    :param page_index: number that represents the home page (mentioned in the main.py)
+    """
+    update_session_state("my_HF_token", hf_token)
+    update_session_state("page_index", page_index)
 
-
+    
 def display_results():
     """
     Display Results page
