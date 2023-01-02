@@ -6,10 +6,9 @@ This speech to text application is based on 2 [notebook tutorials](https://githu
 
 ### Launch the app with AI Deploy:
 <code>
-ovhai app run \
---default-http-port 8501 \
+ovhai app run mathieubsqt/speech_to_text_app:twitch_v1.0 \
 --gpu 1 \
---registry/streamlit_app:version
+--default-http-port 8501
 </code>
 
 
