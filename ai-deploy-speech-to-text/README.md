@@ -11,6 +11,11 @@ ovhai app run mathieubsqt/speech_to_text_app:twitch_v1.0 \
 --default-http-port 8501
 ```
 
+### Important
+To enable the diarization option (speakers differentiation), you will need an access token. This token will be requested at the launch of the application.
+To create your token, follow the steps indicated here: https://huggingface.co/pyannote/speaker-diarization
+
+If the token is not specified, the application will be launched without this feature.
 
 ### Files description
 - `requirements.txt` files contain the librairies used by our speech to text app
@@ -19,7 +24,6 @@ ovhai app run mathieubsqt/speech_to_text_app:twitch_v1.0 \
 - `download_models.py` is an optional script that allows you to download the models required by our Speech to Text Application and save them in a folder or an Object Storage with AI Deploy.
 Storing your models in a folder will save you some time. Indeed, you will not have to download them every time you launch the app!
 
-### Important
-To make it work with the diarization option (speakers differentiation), do not forget to **replace the default token by your own one** in the text area that will be displayed when the app will be launched!
+
 
 
