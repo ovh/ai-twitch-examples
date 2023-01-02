@@ -333,27 +333,15 @@ def transcription(stt_tokenizer, stt_model, t5_tokenizer, t5_model, summarizer, 
                     # Saving the number of detected speakers
                     update_session_state("number_of_speakers", number_of_speakers)
 
-                    # If it has not detected anyone, we opt for a non diarization mode to save time
-                    if number_of_speakers == 0:
-                        diarization_token = False
-                        save_result, txt_text, srt_text = transcription_non_diarization(filename, myaudio, start, end,
-                                                                                        diarization_token,
-                                                                                        timestamps_token,
-                                                                                        srt_token, summarize_token,
-                                                                                        stt_model, stt_tokenizer,
-                                                                                        min_space, max_space,
-                                                                                        save_result, txt_text,
-                                                                                        srt_text)
                     # Transcribe process with Diarization Mode
-                    else:
-                        save_result, txt_text, srt_text = transcription_diarization(filename, diarization_timestamps,
-                                                                                    stt_model,
-                                                                                    stt_tokenizer,
-                                                                                    diarization_token,
-                                                                                    srt_token, summarize_token,
-                                                                                    timestamps_token, myaudio, start,
-                                                                                    save_result,
-                                                                                    txt_text, srt_text)
+                    save_result, txt_text, srt_text = transcription_diarization(filename, diarization_timestamps,
+                                                                                stt_model,
+                                                                                stt_tokenizer,
+                                                                                diarization_token,
+                                                                                srt_token, summarize_token,
+                                                                                timestamps_token, myaudio, start,
+                                                                                save_result,
+                                                                                txt_text, srt_text)
 
                 # Non Diarization Mode
                 else:
@@ -364,6 +352,7 @@ def transcription(stt_tokenizer, stt_model, t5_tokenizer, t5_model, summarizer, 
                         update_session_state("chosen_mode", "NODIA_TS")
 
                     filename = "../data/" + filename
+                    
                     # Transcribe process with non Diarization Mode
                     save_result, txt_text, srt_text = transcription_non_diarization(filename, myaudio, start, end,
                                                                                     diarization_token, timestamps_token,
