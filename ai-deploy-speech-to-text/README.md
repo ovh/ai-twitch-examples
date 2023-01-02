@@ -20,10 +20,6 @@ ovhai app run mathieubsqt/speech_to_text_app:twitch_v1.0 \
 Storing your models in a folder will save you some time. Indeed, you will not have to download them every time you launch the app!
 
 ### Important
-To make it work with the diarization option (speakers differentiation), do not forget to **replace the default token by your own one** in the following line of code of the `app.py` file:
-
-```bash
-dia_pipeline = Pipeline.from_pretrained("pyannote/speaker-diarization@2.1", use_auth_token="ACCESS TOKEN GOES HERE")
-```
+To make it work with the diarization option (speakers differentiation), do not forget to **replace the default token by your own one** in the text area that will be displayed when the app will be launched!
 
 
