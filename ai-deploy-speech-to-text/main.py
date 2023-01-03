@@ -6,7 +6,7 @@ if __name__ == '__main__':
     if st.session_state['page_index'] == -1:
         # Specify token page (mandatory to use the diarization option)
         st.warning('You must specify a token to use the diarization model. Otherwise, the app will be launched without this model. You can learn how to create your token here: https://huggingface.co/pyannote/speaker-diarization')
-        text_input = st.text_input("Enter your Hugging Face token:", placeholder="ACCESS_TOKEN_GOES_HERE")
+        text_input = st.text_input("Enter your Hugging Face token:", placeholder="ACCESS_TOKEN_GOES_HERE", type="password")
 
         # Confirm or continue without the option
         col1, col2 = st.columns(2)
