@@ -39,7 +39,7 @@ def config():
 
     # Initialize session state variables
     if 'page_index' not in st.session_state:
-        st.session_state['page_index'] = -1  # Handle which page should be displayed (home page, results page, rename page)
+        st.session_state['page_index'] = -1  # Handle which page should be displayed (token page, home page, results page, rename page)
         st.session_state['txt_transcript'] = ""  # Save the transcript as .txt so we can display it again on the results page
         st.session_state["process"] = []  # Save the results obtained so we can display them again on the results page
         st.session_state['srt_txt'] = ""  # Save the transcript in a subtitles case to display it on the results page
@@ -329,7 +329,7 @@ def transcription(stt_tokenizer, stt_model, t5_tokenizer, t5_model, summarizer, 
 
                     # Differentiate speakers process
                     diarization_timestamps, number_of_speakers = diarization_treatment(filename, dia_pipeline,
-                                                                                       max_space, srt_token, start)
+                                                                                       max_space, srt_token)
                     # Saving the number of detected speakers
                     update_session_state("number_of_speakers", number_of_speakers)
 
@@ -1122,15 +1122,20 @@ def get_diarization(dia_pipeline, filename):
 
 
 def confirm_token_change(hf_token, page_index):
+    """
+    A function that saves the hugging face token entered by the user.
+    It also updates the page index variable so we can indicate we now want to display the home page instead of the token page
+    :param hf_token: user's token
+    :param page_index: number that represents the home page index (mentioned in the main.py file)
+    """
     update_session_state("my_HF_token", hf_token)
     update_session_state("page_index", page_index)
 
 
-def convert_str_diarlist_to_timedelta(diarization_result, start):
+def convert_str_diarlist_to_timedelta(diarization_result):
     """
     Extract from Diarization result the given speakers with their respective speaking times and transform them in pandas timedelta objects
     :param diarization_result: result of diarization
-    :param start: start value (s) of the considered audio part to transcribe
     :return: list with timedelta intervals and their respective speaker
     """
 
@@ -1361,14 +1366,13 @@ def click_timestamp_btn(sub_start):
     update_session_state("start_time", int(sub_start / 1000))  # division to convert ms to s
 
 
-def diarization_treatment(filename, dia_pipeline, max_space, srt_token, start):
+def diarization_treatment(filename, dia_pipeline, max_space, srt_token):
     """
     Launch the whole diarization process to get speakers time intervals as pandas timedelta objects
     :param filename: name of the audio file
     :param dia_pipeline: Diarization Model (Differentiate speakers)
     :param max_space: Maximum temporal distance between two silences
     :param srt_token: Enable/Disable generate srt file (choice fixed by user)
-    :param start: start value (s) of the considered audio part to transcribe
     :return: speakers time intervals list and number of different detected speakers
     """
     # initialization
@@ -1378,7 +1382,7 @@ def diarization_treatment(filename, dia_pipeline, max_space, srt_token, start):
     diarization, number_of_speakers = get_diarization(dia_pipeline, filename)
 
     if len(diarization) > 0:
-        diarization_timestamps = convert_str_diarlist_to_timedelta(diarization, start)
+        diarization_timestamps = convert_str_diarlist_to_timedelta(diarization)
         diarization_timestamps = merge_speaker_times(diarization_timestamps, max_space, srt_token)
         diarization_timestamps = extending_timestamps(diarization_timestamps)
 
