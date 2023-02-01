@@ -958,7 +958,6 @@ def optimize_subtitles(transcription, srt_index, sub_start, sub_end, srt_text):
     :param sub_start: beginning of the transcript
     :param sub_end: end of the transcript
     :param srt_text: generated .srt transcript
-    :return:
     """
 
     transcription_length = len(transcription)
