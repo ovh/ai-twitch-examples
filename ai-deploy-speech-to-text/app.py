@@ -188,7 +188,7 @@ def load_models():
         except FileNotFoundError:
             dia_pipeline = Pipeline.from_pretrained("pyannote/speaker-diarization@2.1",
                                                     use_auth_token=st.session_state["my_HF_token"])
-            # If the token hasn't been modified, dia_pipeline will automatically be set to None. The functionnality will then be disabled.
+            # If the token hasn't been modified, dia_pipeline will automatically be set to None. The functionality will then be disabled.
 
     return stt_tokenizer, stt_model, t5_tokenizer, t5_model, summarizer, dia_pipeline
 
